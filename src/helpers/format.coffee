@@ -5,5 +5,4 @@ round = do ( formatter = undefined ) ->
       maximumFractionDigits: 2
     formatter.format n
 
-
 export { round }

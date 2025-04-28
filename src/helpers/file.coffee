@@ -22,12 +22,14 @@ File =
     for await line from reactor
       if line.path != path
         if lines?.length > 0
-          FS.writeFile path, lines.join "\n"
+          await FS.writeFile path, lines.join "\n"
+          yield path
         path = line.path
         lines = [ line.text ]
       else
         lines.push line.text
     if lines?.length > 0
       await FS.writeFile path, lines.join "\n"
+      yield path
     
 export default File

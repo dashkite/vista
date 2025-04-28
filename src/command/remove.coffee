@@ -1,6 +1,7 @@
 import { pipe } from "@dashkite/joy/function"
 import log from "@dashkite/kaiko"
 import Issues from "#helpers/issues"
+import File from "#helpers/file"
 
 command = ( args, options, configuration ) ->
 
@@ -10,7 +11,7 @@ command = ( args, options, configuration ) ->
       message: "processing: #{ description }"
 
     removed = do pipe [
-      Issues.remove comment, glob, exclude
+      -> Issues.remove comment, glob, exclude
       File.writer 
     ]
 

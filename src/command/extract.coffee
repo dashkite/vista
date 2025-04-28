@@ -17,4 +17,3 @@ command = ( args, options, configuration ) ->
   console.log YAML.dump issues
 
 export default command
-
