@@ -1,0 +1,21 @@
+files:
+
+  - description: CoffeeScript
+    glob: "*.coffee"
+    comment: "#"
+
+  - description: YAML
+    glob: "*.yaml"
+    comment: "#"
+
+  - description: Pug (hidden comments)
+    glob: "*.pug"
+    comment: "//-"
+
+  - description: Pug (visible comments)
+    glob: "*.pug"
+    comment: "//"
+
+  - description: Stylus
+    glob: "*.styl"
+    comment: "//"
