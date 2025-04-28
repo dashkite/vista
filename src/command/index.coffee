@@ -31,6 +31,7 @@ Command =
         log.info
           console: true
           message: "running command [ #{ command } ]"
+
         if ( await Git.clean() )
           command = ( await import("./#{ command }") ).default
           command args, options, configuration
