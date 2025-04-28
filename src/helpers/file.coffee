@@ -18,4 +18,16 @@ File =
     yaml += data for await data from reactor      
     yield issue for issue in YAML.load yaml
 
+  writer: ( reactor ) ->
+    for await line from reactor
+      if line.path != path
+        if lines?.length > 0
+          FS.writeFile path, lines.join "\n"
+        path = line.path
+        lines = [ line.text ]
+      else
+        lines.push line.text
+    if lines?.length > 0
+      await FS.writeFile path, lines.join "\n"
+    
 export default File

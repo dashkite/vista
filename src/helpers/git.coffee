@@ -1,4 +1,5 @@
 import { $ } from "execa"
+import micromatch from "micromatch"
 
 Git =
 
@@ -10,11 +11,13 @@ Git =
     # catch error      
     #   false
 
-  ls: ( glob ) ->
+  ls: ( glob, exclude = [] ) ->
     try
-      result = $"git ls-files #{ glob }"
-      for await path from result
-        yield path
+
+      for await path from $"git ls-files #{ glob }"
+        unless micromatch.isMatch path, exclude
+          yield path
+
     catch error
       console.error error  
 

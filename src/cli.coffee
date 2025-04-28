@@ -26,9 +26,9 @@ program
   .action Command.run "publish"
   
 program
-  .command "clean"
+  .command "remove"
   .description "remove todos from source files"
-  .action Command.run "clean"
+  .action Command.run "remove"
 
 program
   .command "todos"

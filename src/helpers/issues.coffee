@@ -6,10 +6,10 @@ import File from "#helpers/file"
 
 Issues =
 
-  extract: ( comment, glob ) ->
+  extract: ( comment, glob, exclude ) ->
 
     todos = do pipe [
-      -> Git.ls glob
+      -> Git.ls glob, exclude
       File.lines
       Issues.classify comment
       Issues.build comment
@@ -17,7 +17,7 @@ Issues =
 
     yield issue for await issue from todos
 
-
+  # tranforms a line reactor into a classification reactor
   classify: ( comment ) ->
 
     todo = "#{ comment } TODO"
@@ -34,6 +34,19 @@ Issues =
           parsing = false
           yield { todo: false, text, path, line }
 
+  # filters a classification reactor into a non-todo line reactor
+  remove: ( comment, glob, exclude ) ->
+
+    todos = do pipe [
+      -> Git.ls glob, exclude
+      File.lines
+      Issues.classify comment
+    ]
+
+    for await { todo, text, path } from todos
+      yield { text, path } if !todo
+
+  # transforms a classification reactor into an issue reactor
   build: ( comment ) ->
     ( reactor ) ->
       for await { todo, type, text, path, line } from reactor
@@ -52,6 +65,7 @@ Issues =
                   issue.body += " #{ body }"
       yield issue if issue?
 
+  # converts an issue reactor into commands to create issues
   command: ( project ) ->
    ( reactor ) ->
       for await issue from reactor
