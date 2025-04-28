@@ -2,7 +2,7 @@ import log from "@dashkite/kaiko"
 import YAML from "js-yaml"
 import Todos from "#helpers/todos"
 
-command = ( args, options, configuration ) ->
+extract = ( args, options, configuration ) ->
 
   issues = []
 
@@ -14,6 +14,7 @@ command = ( args, options, configuration ) ->
     for await issue from Todos.extract comment, glob, exclude
       issues.push issue
 
-  console.log YAML.dump issues
+  if issues.length > 0
+    console.log YAML.dump issues
 
-export default command
+export default extract

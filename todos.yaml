@@ -1,14 +1,11 @@
+- title: Run The Command
+  path: src/command/publish.coffee
+  line: 13
 - title: Check For Configuration Files
-  path: ./src/configuration/index.coffee
+  path: src/configuration/index.coffee
   line: 6
   body: ~/.config/vista.yaml or ./vista.yaml we can use zephyr
 - title: Validate Configuration File
-  path: ./src/configuration/index.coffee
+  path: src/configuration/index.coffee
   line: 10
-- title: Get Version From Package.Json
-  path: ./src/cli.coffee
-  line: 7
-- title: Get Exclude Dirs From .Gitignore
-  path: ./src/command/extract.coffee
-  line: 36
 

@@ -1,5 +1,4 @@
 import FS from "node:fs/promises"
-import YAML from "js-yaml"
 
 File =
 
@@ -14,11 +13,6 @@ File =
           yield { text, line, path }
           line++
       return
-
-  issues: ( reactor ) ->
-    yaml = ""
-    yaml += data for await data from reactor      
-    yield issue for issue in YAML.load yaml
 
   writer: ( reactor ) ->
     for await line from reactor

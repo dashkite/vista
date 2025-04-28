@@ -1,24 +1,21 @@
 import { pipe } from "@dashkite/joy/function"
 import log from "@dashkite/kaiko"
 import Issues from "#helpers/issues"
-import File from "#helpers/file"
+import Commands from "#helpers/command"
 
-command = ( args, options, configuration ) ->
+publish = ( args, options, configuration ) ->
 
-  # NOTE we can now use the output from extract
-  #      because we can just pipe it into Issues.command
-  # commands = do pipe [
-  #   ->   Issues.extract comment, glob
-  #   Issues.command options.project
-  # ]
-
-  commands = do pipe [
-    -> File.issues process.stdin
+  do pipe [
+    -> Issues.from process.stdin
     Issues.command options.project
+    Commands.run
+    ( results ) ->
+      issues = []
+      for await result from results
+        if !result.success
+          issues.push result.context.issue
+      if issues.length > 0
+        console.log YAML.dump issues
   ]
 
-  for await _command from commands
-    # TODO run the command
-    console.log _command
-
-export default command
+export default publish

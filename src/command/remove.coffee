@@ -3,7 +3,7 @@ import { start as run } from "@dashkite/joy/iterable"
 import log from "@dashkite/kaiko"
 import Todos from "#helpers/todos"
 
-command = ( args, options, configuration ) ->
+remove = ( args, options, configuration ) ->
 
   for { description, comment, glob, exclude } in configuration.files
     log.info
@@ -12,4 +12,4 @@ command = ( args, options, configuration ) ->
 
     await run Todos.remove comment, glob, exclude
 
-export default command
+export default remove
