@@ -37,14 +37,15 @@ Issues =
   # filters a classification reactor into a non-todo line reactor
   remove: ( comment, glob, exclude ) ->
 
-    todos = do pipe [
+    do pipe [
       -> Git.ls glob, exclude
       File.lines
       Issues.classify comment
+      ( todos ) ->
+        for await { todo, text, path } from todos
+          yield { text, path } if !todo
+      File.writer
     ]
-
-    for await { todo, text, path } from todos
-      yield { text, path } if !todo
 
   # transforms a classification reactor into an issue reactor
   build: ( comment ) ->

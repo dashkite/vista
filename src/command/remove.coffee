@@ -10,12 +10,7 @@ command = ( args, options, configuration ) ->
       console: true
       message: "processing: #{ description }"
 
-    removed = do pipe [
-      -> Issues.remove comment, glob, exclude
-      File.writer 
-    ]
-
-    for await path from removed
+    for await path from Issues.remove comment, glob, exclude
       log.info
         console: true
         message: "updated file [ #{ path } ]"
