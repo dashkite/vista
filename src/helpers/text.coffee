@@ -1,9 +1,10 @@
 after = ( target, text ) ->
-  if ( i = text.indexOf target ) >= 0
-    text.substr ( i + target.length )
+  if ( m = text.match target )?
+    [ matched ] = { index } = m
+    text.substr ( index + matched.length )
   else text
 
 contains = ( target, text ) ->
-  text.includes target
+  ( text.match target )?
 
 export { after, contains }

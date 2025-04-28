@@ -1,6 +1,6 @@
 import log from "@dashkite/kaiko"
 import YAML from "js-yaml"
-import Issues from "#helpers/issues"
+import Todos from "#helpers/todos"
 
 command = ( args, options, configuration ) ->
 
@@ -11,7 +11,7 @@ command = ( args, options, configuration ) ->
       console: true
       message: "processing: #{ description }"
 
-    for await issue from Issues.extract comment, glob, exclude
+    for await issue from Todos.extract comment, glob, exclude
       issues.push issue
 
   console.log YAML.dump issues
