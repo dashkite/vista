@@ -6,9 +6,11 @@ File =
   lines: ( reactor ) ->
     try
       for await path from reactor
-        fh = await FS.open path
+        # I tried usin FS.open with  FS.readlines here
+        # but we were somehow dropping trailing newlines
+        content = await FS.readFile path, "utf8"
         line = 1
-        for await text from fh.readLines()
+        for text in content.split "\n"
           yield { text, line, path }
           line++
       return
@@ -22,14 +24,14 @@ File =
     for await line from reactor
       if line.path != path
         if lines?.length > 0
-          await FS.writeFile path, lines
+          await FS.writeFile path, lines.join "\n"
           yield path
         path = line.path
-        lines = [ "#{ line.text }\n" ]
+        lines = [ line.text ]
       else
-        lines.push "#{ line.text }\n"
+        lines.push line.text
     if lines?.length > 0
-      await FS.writeFile path, lines
+      await FS.writeFile path, lines.join "\n"
       yield path
     
 export default File
