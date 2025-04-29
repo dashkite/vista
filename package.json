@@ -43,7 +43,8 @@
     "@dashkite/genie": "link:../genie",
     "@dashkite/genie-clean": "link:../genie-clean",
     "@dashkite/genie-coffee": "link:../genie-coffee",
-    "@dashkite/genie-yaml": "link:../genie-yaml"
+    "@dashkite/genie-yaml": "link:../genie-yaml",
+    "@dashkite/vista": "link:"
   },
   "dependencies": {
     "@dashkite/kaiko": "^0.3.3",
