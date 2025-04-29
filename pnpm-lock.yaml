@@ -23,6 +23,9 @@ importers:
       micromatch:
         specifier: ^4.0.8
         version: 4.0.8
+      zx:
+        specifier: ^8.5.3
+        version: 8.5.3
     devDependencies:
       '@dashkite/amen':
         specifier: ^0.2.0
@@ -121,6 +124,11 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
+  zx@8.5.3:
+    resolution: {integrity: sha512-TsGLAt8Ngr4wDXLZmN9BT+6FWVLFbqdQ0qpXkV3tIfH7F+MgN/WUeSY7W4nNqAntjWunmnRaznpyxtJRPhCbUQ==}
+    engines: {node: '>= 12.17.0'}
+    hasBin: true
+
 snapshots:
 
   '@dashkite/amen-console@0.0.2':
@@ -184,3 +192,5 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
+
+  zx@8.5.3: {}

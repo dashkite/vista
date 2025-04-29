@@ -22,6 +22,7 @@ program
 program
   .command "publish"
   .description "convert issues into GitHub tickets"
+  .option "-n, --dry-run", "Show gh commands but don't execute them"
   .option "-p, --project <name>", "Project name for adding issues"
   .action Command.run "publish"
   
@@ -33,6 +34,7 @@ program
 program
   .command "todos"
   .description "extract and remove todos and create issues"
+  .option "-n, --dry-run", "Show gh commands but don't execute them"
   .option "-p, --project <name>", "Project name for adding issues"
   .action Command.run "todos"
 

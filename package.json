@@ -26,7 +26,9 @@
     "#reactors/*": "./build/node/src/reactors/*.js",
     "#helpers/*": "./build/node/src/helpers/*.js"
   },
-  "main": "build/node/src/index.js",
+  "bin": {
+    "vista": "./build/node/src/bin/vista.js"
+  },
   "files": [
     "build/node/src"
   ],
@@ -48,6 +50,7 @@
     "chalk": "^5.4.1",
     "commander": "^13.1.0",
     "dayjs": "^1.11.13",
-    "micromatch": "^4.0.8"
+    "micromatch": "^4.0.8",
+    "zx": "^8.5.3"
   }
 }

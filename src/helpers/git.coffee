@@ -1,15 +1,22 @@
-import { $ } from "execa"
+import { $ } from "zx"
 import micromatch from "micromatch"
 
 Git =
 
+  commit: ->
+    try
+      result = await $"git add -A . && 
+        git commit -m 'vista: converted todos into GitHub Issues'"
+      console.error result.toString()
+    catch error
+      console.error error.toString()
+
   clean: ->
-    true
-    # try
-    #   await $"git diff-index --quiet HEAD"
-    #   true
-    # catch error      
-    #   false
+    try
+      await $"git diff-index --quiet HEAD"
+      true
+    catch error      
+      false
 
   ls: ( glob, exclude = [] ) ->
     try

@@ -21,7 +21,7 @@ Todos =
   # tranforms a line reactor into a classification reactor
   classify: ( comment ) ->
 
-    tag = ///#{ comment }\s+TODO///
+    tag = ///#{ comment }\s+TODO:?///
     parsing = false
 
     ( reactor ) ->

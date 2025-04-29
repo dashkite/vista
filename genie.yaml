@@ -1,3 +1,6 @@
 coffee:
   targets:
-    - node
+    node:
+      - glob:
+        - src/**/*.coffee
+        - src/bin/*
