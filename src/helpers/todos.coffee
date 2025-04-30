@@ -20,7 +20,6 @@ Todos =
         return
     ]
 
-
   # tranforms a line reactor into a classification reactor
   classify: ( specifier ) ->
 
@@ -35,45 +34,66 @@ Todos =
       # is a comment or not
 
       prepare = ( reactor ) ->
-        do ( block = false ) ->
-          for await { text, context... } from reactor
+        do ({current, block, text, path, context } = {}) ->
+          current = undefined
+          block = false
+          for await { text, path, context... } from reactor
+            if current != path
+              current = path
+              block = false
             if block
               if text.match comment.block.end
                 block = false
-                yield { text, context..., comment: true }
+                yield { text, path, context..., comment: true }
               else
-                yield { text, context..., comment: true }
+                yield { text, path, context..., comment: true }
             else
               if comment.block? && text.match comment.block.begin
                 block = true
-                yield { text, context..., comment: true }
+                yield { 
+                  text, path, context...
+                  comment: ( after comment.block.begin, text ).trim()
+                }
               else if text.match comment.inline
-                yield { text, context..., comment: true }
+                yield { 
+                  text, path, context...
+                  comment: ( after comment.inline, text ).trim()
+                }
               else
-                yield { text, context..., comment: false }
+                yield { text, path, context... }
               
       ( reactor ) ->
-        do ( todo = false, { comment } = {}) ->
+        do ({ todo, current, text, comment, path, line } = {}) ->
+          todo = false
+          current = undefined
           for await { text, comment, path, line } from prepare reactor
-            # TODO need to make sure the todo is after the comment delimiter
-            if comment && contains /\btodo:?\b/i, text
+            if current != path
+              current = path
+              todo = false
+            if comment? && contains /\b^todo:?\b/i, comment
               todo = true
-              yield { todo, type: "title", comment, text, path, line }
-            else if comment && todo
-              yield { todo, type: "body", comment, text, path, line }
+              yield { 
+                text, path, line, comment, todo
+                title: ( after /\b^todo:?\b/i, comment ).trim()
+              }
+            else if comment? && todo
+              yield { 
+                text, path, line, comment, todo
+                body: comment.trim()
+              }
             else
               todo = false
-              yield { todo, comment, text, path, line }
+              yield { text, path, line, comment, todo }
 
   # filters a classification reactor into a non-todo line reactor
   remove: ( comment, glob, exclude ) ->
-
     do pipe [
       -> Git.ls glob, exclude
       File.lines
       Todos.classify comment
       ( todos ) ->
-        do ( empty = false, current = undefined ) ->
+        do ({ empty, current, todo, text, path } = {}) ->
+          empty = false
           for await { todo, text, path } from todos
             if path != current
               current = path

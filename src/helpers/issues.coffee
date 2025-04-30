@@ -47,20 +47,21 @@ Issues =
     tag = ///#{ comment }\s+TODO:?///
 
     ( reactor ) ->
-      for await { todo, type, text, path, line } from reactor
+      do ({ todo, path, line, title, body } = {})
+      for await { todo, path, line, title, body } from reactor
         if todo
-          switch type
-            when "title"
-              yield issue if issue?
-              title = Format.title ( after tag, text ).trim()
-              issue = { title, path, line }
-            when "body"
-              body = ( after comment, text ).trim()
-              if body.length > 0
-                if !issue.body?
-                  issue.body = Format.sentence body
-                else
-                  issue.body += " #{ body }"
+          if title?
+            yield issue if issue?
+            issue = { 
+              path, line 
+              title: Format.title title
+            }
+          else if body?
+            if body.length > 0
+              if !issue.body?
+                issue.body = Format.sentence body
+              else
+                issue.body += " #{ body }"
       yield issue if issue?
 
   # converts an issue reactor into commands to create issues
