@@ -2,6 +2,10 @@ import FS from "node:fs"
 import Path from "node:path"
 import { program } from "commander"
 import Command from "./command"
+import { $ } from "zx"
+
+# we'll handle our own output thank you
+$.quiet = true
 
 program
   .version do ({ path, json, pkg } = {}) ->

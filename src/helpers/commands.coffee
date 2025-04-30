@@ -11,12 +11,14 @@ Commands =
       for await { command, context } from commands
         if rehearsal
           console.error ( Commands.format command ), "\n"
-          yield { success: true, command, output, context }
+          yield { success: true, command, output: "", context }
         else
           try
             result = await $"#{ command.name } #{ command.arguments }"
-            yield { success: true, command, output: result.toString(), context }
+            output = result.toString().trim()
+            yield { success: true, command, output, context }
           catch error
-            yield { success: false, command, output: error.toString(), context }
+            output = error.toString().trim()
+            yield { success: false, command, output, error, context }
 
 export default Commands

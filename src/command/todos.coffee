@@ -1,3 +1,4 @@
+import FS from "node:fs/promises"
 import YAML from "js-yaml"
 import { pipe } from "@dashkite/joy/function"
 import { start as run } from "@dashkite/joy/iterable"
@@ -19,24 +20,22 @@ todos = ( args, options, configuration ) ->
       console: true
       message: "processing: #{ description }"
 
-    issues = []
     await do pipe [
       -> Todos.extract comment, glob, exclude
       Issues.command options.project
       Commands.run options.dryRun
       ( results ) ->
         for await result from results
-          console.error result.output
+          if result.output != ""
+            console.error result.output
           if !result.success
-            issues.push result.context.issue
-        if issues.length > 0
-          console.log YAML.dump issues
+            throw new Error "conversion failed"
     ]
 
-    if !options.dryRun && ( issues.length == 0 )
+    if !options.dryRun
       await run Todos.remove comment, glob, exclude
 
-  if !options.dryRun  
+  if !options.dryRun && !( await Git.clean())
     await Git.commit()
 
 export default todos

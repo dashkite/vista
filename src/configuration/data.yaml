@@ -2,7 +2,10 @@ files:
 
   - description: CoffeeScript
     glob: "*.coffee"
-    comment: "#"
+    comment:
+      inline: "#"
+      # tests: https://regex101.com/r/2NL55W/6
+      block: "^[^#]*###(?:$|[^#])"
 
   - description: YAML
     glob: "*.yaml"
@@ -10,13 +13,9 @@ files:
     exclude:
       - pnpm-lock.yaml
 
-  - description: Pug (hidden comments)
+  - description: Pug
     glob: "*.pug"
-    comment: "//-"
-
-  - description: Pug (visible comments)
-    glob: "*.pug"
-    comment: "//"
+    comment: "//-?"
 
   - description: Stylus
     glob: "*.styl"

@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@dashkite/generic':
+        specifier: link:../generic
+        version: link:../generic
       '@dashkite/kaiko':
         specifier: ^0.3.3
         version: 0.3.3
+      '@dashkite/url-codex':
+        specifier: link:../url-codex
+        version: link:../url-codex
       chalk:
         specifier: ^5.4.1
         version: 5.4.1
@@ -48,9 +54,6 @@ importers:
       '@dashkite/genie-yaml':
         specifier: link:../genie-yaml
         version: link:../genie-yaml
-      '@dashkite/vista':
-        specifier: 'link:'
-        version: 'link:'
 
 packages:
 

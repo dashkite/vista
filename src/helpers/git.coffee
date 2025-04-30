@@ -7,9 +7,9 @@ Git =
     try
       result = await $"git add -A . && 
         git commit -m 'vista: converted todos into GitHub Issues'"
-      console.error result.toString()
+      console.error result.toString().trim()
     catch error
-      console.error error.toString()
+      console.error error.toString().trim()
 
   clean: ->
     try

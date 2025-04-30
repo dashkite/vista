@@ -9,6 +9,7 @@ import Configuration from "../configuration"
 Command =
 
   run: ( command ) ->
+
     # ignore the commander object itself
     ( args..., options, _ ) ->
 
@@ -32,13 +33,20 @@ Command =
           console: true
           message: "running command [ #{ command } ]"
 
-        if ( await Git.clean() )
-          command = ( await import("./#{ command }") ).default
-          command args, options, configuration
-        else
+        try
+          if ( await Git.clean() )
+            command = ( await import("./#{ command }") ).default
+            await command args, options, configuration
+          else
+            log.error
+              console: true
+              message: "working directory not clean, exiting..."
+            process.exit 1
+        catch error
           log.error
             console: true
-            message: "working directory not clean, exiting..."
+            message: error.message
+          process.exit 1
       
       log.info 
         console: true
