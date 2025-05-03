@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "@dashkite/generic": "link:../generic",
+    "@dashkite/joy": "link:../joy",
     "@dashkite/kaiko": "^0.3.3",
     "@dashkite/url-codex": "link:../url-codex",
     "@dashkite/zephyr": "link:../zephyr",

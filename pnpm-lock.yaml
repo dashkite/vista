@@ -11,6 +11,9 @@ importers:
       '@dashkite/generic':
         specifier: link:../generic
         version: link:../generic
+      '@dashkite/joy':
+        specifier: link:../joy
+        version: link:../joy
       '@dashkite/kaiko':
         specifier: ^0.3.3
         version: 0.3.3

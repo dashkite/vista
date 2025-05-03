@@ -6,8 +6,7 @@ Configuration =
 
   load: ->
     if ( local = await Zephyr.read "vista.yaml" )?
-      # Val.merge data, local
-      local
+      Val.merge data, local
     else
       data
 

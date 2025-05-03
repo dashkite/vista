@@ -7,9 +7,14 @@ extract = ( args, options, configuration ) ->
   issues = []
 
   for { description, comment, glob, exclude } in configuration.files
+
     log.info
       console: true
       message: "processing: #{ description }"
+
+    if configuration.exclude?
+      exclude ?= []
+      exclude = [ exclude..., configuration.exclude... ]
 
     for await issue from Todos.extract comment, glob, exclude
       issues.push issue

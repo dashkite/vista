@@ -16,6 +16,10 @@ todos = ( args, options, configuration ) ->
 
   for { description, comment, glob, exclude } in configuration.files
 
+    if configuration.exclude?
+      exclude ?= []
+      exclude = [ exclude..., configuration.exclude... ]
+
     log.info
       console: true
       message: "processing: #{ description }"
