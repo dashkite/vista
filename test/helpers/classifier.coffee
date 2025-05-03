@@ -19,31 +19,3 @@ Classifier =
     todo for await todo from classify lines
 
 export default Classifier
-
-# [
-
-#   test "comment specifier", do ->
-    
-#     category = Scenario.find [ "comment specifier" ]   
-#     for scenario in category.scenarios
-#       do ( scenario ) ->
-#         test scenario.name, ->
-#           Scenario.verify scenario, 
-#             Comment.specifier scenario.specifier
-    
-#   test "extract todos", [
-
-#     test "classifier", do ->        
-
-#       category = Scenario.find [ "extract todos", "classifier" ] 
-#       for subcategory in category.scenarios
-#         test subcategory.name, do ->
-#           for scenario in subcategory.scenarios
-#             do ( scenario ) ->
-#               test scenario.name, Classifier.test scenario
-                  
-#   ]
-  
-
-
-# ]

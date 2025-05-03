@@ -11,18 +11,22 @@ import scenarios from "./scenarios"
 
 do ->
 
-  results = await do ->
-    Runner
-      .make scenarios
-      .apply 
+  print await test "DashKite Vista",
 
-        "comment specifier": 
-          "*": ({ specifier }) -> Comment.specifier specifier
+    await do ->
 
-        "extract todos":
-          "classifier":
-            "**": Classifier.test
+      Runner
 
-  print await test "DashKite Vista", results 
+        .make scenarios
+
+        .apply 
+
+          "comment specifier": 
+            "*": ({ specifier }) -> Comment.specifier specifier
+
+          "extract todos":
+            "classifier":
+              "**": Classifier.test
+
   process.exit if success then 0 else 1
 
