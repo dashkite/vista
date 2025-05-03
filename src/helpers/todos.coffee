@@ -1,6 +1,6 @@
 import { pipe } from "@dashkite/joy/function"
 { titleCase, capitalize } = require "@dashkite/joy/text"
-import { after, contains } from "#helpers/text"
+import { before, after, contains } from "#helpers/text"
 import Git from "#helpers/git"
 import File from "#helpers/file"
 import Issues from "#helpers/issues"
@@ -44,9 +44,15 @@ Todos =
             if block
               if text.match comment.block.end
                 block = false
-                yield { text, path, context..., comment: true }
+                yield {
+                  text, path, context...
+                  comment: ( before comment.block.end, text ).trim()
+                }
               else
-                yield { text, path, context..., comment: true }
+                yield {
+                  text, path, context...
+                  comment: text.trim()
+                }
             else
               if comment.block? && text.match comment.block.begin
                 block = true

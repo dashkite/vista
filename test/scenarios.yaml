@@ -1,0 +1,143 @@
+- name: comment specifier
+  scenarios:
+    - name: simple inline
+      specifier: "#"
+      assertions:
+        - path: $.inline?
+        - { type: regexp, expect: /#/, path: $.inline }
+    - name: simple block
+      specifier: { inline: "#", block: "###" }
+      assertions: &simple-block
+        - path: $.inline?
+        - path: $.block?.begin?
+        - path: $.block?.end?
+        - { type: regexp, expect: /#/, path: $.inline }
+        - { type: regexp, expect: /###/, path: $.block.begin }
+        - { type: regexp, expect: /###/, path: $.block.end }
+    - name: block w/implicit end
+      specifier:
+        inline: "#"
+        block: { begin: "###", end: "###" }
+      assertions: *simple-block
+
+- name: extract todos
+  scenarios:
+    - name: classifier
+      scenarios:
+        - name: inline comment
+          scenarios: 
+            - name: simple todo
+              comments: "#"
+              lines:
+                - { text: not a comment, path: a }
+                - { text: "# comment", path: a }
+                - { text: "# todo title", path: a }
+                - { text: "#      body text", path: a }
+              assertions:
+                - path: "!$[0].todo"
+                - path: "!$[1].todo"
+                - path: $[1].comment?
+                - path: $[2].todo
+                - { type: equal, path: "$[2].title", expect: title }
+                - path: $[3].todo
+                - { type: equal, path: "$[3].body", expect: body text }
+
+            - name: todo at end of file
+              comments: "#"
+              lines:
+                - { text: not a comment, path: a }
+                - { text: "# not a todo", path: a }
+                - { text: "# todo title", path: a }
+                - { text: "#      body text", path: a }
+                - { text: "# not a todo", path: b }
+              assertions:
+                - path: "!$[4].todo"
+
+        - name: block comment
+          scenarios:
+            - name: simple todo
+              comments:
+                inline: "#"
+                block: "^[^#]*###(?:$|[^#])"
+              lines:
+                - { text: not a comment, path: a }
+                - { text: "###", path: a }
+                - { text: "comment", path: a }
+                - { text: "###", path: a }
+                - { text: "### todo title", path: a }
+                - { text: "         body text", path: a }
+              assertions:
+                - path: "!$[0].todo"
+                - path: "!$[0].comment?"
+                - path: $[1].comment?
+                - path: "!$[1].todo"
+                - path: $[2].comment?
+                - path: "!$[2].todo"
+                - path: $[3].comment?
+                - path: "!$[3].todo"
+                - path: $[4].comment?
+                - path: $[4].todo
+                - { type: equal, path: "$[4].title", expect: title }
+                - path: $[5].comment?
+                - path: $[5].todo
+                - { type: equal, path: "$[5].body", expect: body text }
+
+        - name: mixed block and inline
+          scenarios:
+            - name: within a file
+              # debug: true
+              comments:
+                inline: "#"
+                block: "^[^#]*###(?:$|[^#])"
+              lines:
+                - { text: not a comment, path: a }
+                - { text: "# not a todo", path: a }
+                - { text: "# todo title", path: a }
+                - { text: "#      body text", path: a }
+                - { text: "not a comment", path: a }
+                - { text: "###", path: a }
+                - { text: "comment", path: a }
+                - { text: "###", path: a }
+                - { text: "### todo title", path: a }
+                - { text: "         body text", path: a }
+                - { text: "###", path: a }
+                - { text: "# ordinary comment", path: a }
+                - { text: "# ### todo title", path: a }
+                - { text: "# body", path: a }
+              assertions:
+                - path: "!$[0].todo"
+                - path: "!$[1].todo"
+                - path: $[2].todo
+                - { type: equal, expect: title,  path: "$[2].title" }
+                - path: $[3].todo
+                - type: equal
+                  expect: body text
+                  path: $[3].body
+                - path: "!$[4].todo"
+                - path: "!$[5].todo"
+                - path: "!$[6].todo"
+                - path: "!$[7].todo"
+                - path: $[8].todo
+                - { type: equal, expect: title, path: "$[8].title" }
+                - path: $[9].todo
+                - { type: equal, expect: body text, path: "$[9].body" }
+                - path: "!$[11].todo"
+                - path: $[12].todo
+                # - { type: equal, expect: title, path: "$[11].title" }
+            - name: across files
+              # debug: true
+              comments:
+                inline: "#"
+                block: "^[^#]*###(?:$|[^#])"
+              lines:
+                - { text: "###", path: a }
+                - { text: "comment", path: a }
+                - { text: "### todo title", path: b }
+                - { text: "         body text", path: b }
+              assertions:
+                - path: "!$[0].todo"
+                - path: "!$[1].todo"
+                - path: $[2].todo
+                - { type: equal, expect: title, path: "$[2].title" }
+                - path: $[3].todo
+                - { type: equal, expect: "body text", path: "$[3].body" }
