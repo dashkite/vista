@@ -33,7 +33,6 @@ Todos =
       # mini-classifier that determines whether a line
       # is a comment or not
 
-      # TODO move reactors into their own files
 
       prepare = ( reactor ) ->
         do ({current, block, text, path, context } = {}) ->
@@ -70,10 +69,6 @@ Todos =
               else
                 yield { text, path, context... }
               
-      # TODO allow block comments to be followed by inline
-      # comment presently, an inline comment following a
-      # block comment is parsed as if it were part of the
-      # block comment.
 
       ( reactor ) ->
         do ({ todo, current, text, comment, path, line } = {}) ->
