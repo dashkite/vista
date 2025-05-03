@@ -16,6 +16,7 @@ Git =
       await $"git diff-index --quiet HEAD"
       true
     catch error      
+      console.log error: error.toString()
       false
 
   ls: ( glob, exclude = [] ) ->

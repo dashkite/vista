@@ -34,7 +34,7 @@ Command =
           message: "running command [ #{ command } ]"
 
         try
-          if ( await Git.clean() )
+          if ( await Git.clean())
             command = ( await import("./#{ command }") ).default
             await command args, options, configuration
           else
