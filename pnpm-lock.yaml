@@ -17,6 +17,9 @@ importers:
       '@dashkite/url-codex':
         specifier: link:../url-codex
         version: link:../url-codex
+      '@dashkite/zephyr':
+        specifier: link:../zephyr
+        version: link:../zephyr
       chalk:
         specifier: ^5.4.1
         version: 5.4.1

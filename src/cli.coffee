@@ -46,5 +46,6 @@ program
 for command in program.commands
   command
     .option "-v, --verbose", "Perform debug logging"
+    .option "-f, --force", "Probably no"
 
 program.parseAsync()

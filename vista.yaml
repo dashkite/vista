@@ -1,0 +1,16 @@
+files:
+
+  - description: CoffeeScript
+    glob: "*.coffee"
+    comment:
+      inline: "#"
+      # tests: https://regex101.com/r/2NL55W/6
+      block: "^[^#]*###(?:$|[^#])"
+
+  - description: Pug
+    glob: "*.pug"
+    comment: "//-?"
+
+  - description: Stylus
+    glob: "*.styl"
+    comment: "//"

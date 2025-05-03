@@ -1,9 +1,14 @@
+import * as Val from "@dashkite/joy/value"
+import Zephyr from "@dashkite/zephyr"
 import data from "./data"
 
 Configuration =
 
   load: ->
-
-    data
+    if ( local = await Zephyr.read "vista.yaml" )?
+      # Val.merge data, local
+      local
+    else
+      data
 
 export default Configuration

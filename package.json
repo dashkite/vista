@@ -52,6 +52,7 @@
     "@dashkite/generic": "link:../generic",
     "@dashkite/kaiko": "^0.3.3",
     "@dashkite/url-codex": "link:../url-codex",
+    "@dashkite/zephyr": "link:../zephyr",
     "chalk": "^5.4.1",
     "commander": "^13.1.0",
     "dayjs": "^1.11.13",

@@ -43,26 +43,23 @@ Issues =
 
   # transforms a todos reactor into an issue reactor
   build: ( comment ) ->
-
-    tag = ///#{ comment }\s+TODO:?///
-
     ( reactor ) ->
-      do ({ todo, path, line, title, body } = {})
-      for await { todo, path, line, title, body } from reactor
-        if todo
-          if title?
-            yield issue if issue?
-            issue = { 
-              path, line 
-              title: Format.title title
-            }
-          else if body?
-            if body.length > 0
-              if !issue.body?
-                issue.body = Format.sentence body
-              else
-                issue.body += " #{ body }"
-      yield issue if issue?
+      do ({ todo, path, line, title, body } = {}) ->
+        for await { todo, path, line, title, body } from reactor
+          if todo
+            if title?
+              yield issue if issue?
+              issue = { 
+                path, line 
+                title: Format.title title
+              }
+            else if body?
+              if body.length > 0
+                if !issue.body?
+                  issue.body = Format.sentence body
+                else
+                  issue.body += " #{ body }"
+        yield issue if issue?
 
   # converts an issue reactor into commands to create issues
   command: ( project ) ->
