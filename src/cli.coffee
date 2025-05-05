@@ -4,6 +4,20 @@ import { program } from "commander"
 import Command from "./command"
 import { $ } from "zx"
 
+# TODO Allow configuration of file-type to tokenizer mapping (ex: `.foo` files use the `foo` tokenizer)
+
+# TODO Give precedence to file extension for generating the mapping and fallback to (or remove) MIME type check
+
+# TODO Provide an option for including dot-files (or remove that as a default?)
+
+# TODO Allow configuration file to be passed as an option
+
+# TODO Add more tests
+
+# TODO Rename the command and repositor to _Todos_
+
+# TODO Rename the `todos` command to `track`
+
 # we'll handle our own output thank you
 $.quiet = true
 
