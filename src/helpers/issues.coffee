@@ -1,23 +1,16 @@
+import YAML from "js-yaml"
 import { $, quote } from "zx"
-import { after, contains } from "#helpers/text"
 import Git from "#helpers/git"
 import File from "#helpers/file"
-import YAML from "js-yaml"
 import * as URLCodex from "@dashkite/url-codex"
-
-Format =
-  sentence: ( text ) ->
-    text.replace /(?:^|\s)\w/, ( c ) -> c.toUpperCase()
-  
-  title: ( text ) ->
-    text.replace /(?:^|\s)\w/g, ( c ) -> c.toUpperCase()
 
 Reference =
 
   make: ( issue ) ->
     { nameWithOwner: repo } = ( await $"gh repo view --json nameWithOwner" ).json()
     commit = ( await $"git rev-parse HEAD" ).text().trim()
-    url = "https://github.com/#{ repo }/blob/#{ commit }/#{ issue.path }#L#{ issue.line }"
+    { path, line } = issue.token
+    url = "https://github.com/#{ repo }/blob/#{ commit }/#{ path }#L#{ line }"
     "[View original context.](#{ url })"
 
   extract: ( issue ) ->
@@ -41,25 +34,15 @@ Issues =
     yaml += data for await data from stream      
     yield issue for issue in YAML.load yaml
 
-  # transforms a todos reactor into an issue reactor
-  build: ( comment ) ->
-    ( reactor ) ->
-      do ({ todo, path, line, title, body } = {}) ->
-        for await { todo, path, line, title, body } from reactor
-          if todo
-            if title?
-              yield issue if issue?
-              issue = { 
-                path, line 
-                title: Format.title title
-              }
-            else if body?
-              if body.length > 0
-                if !issue.body?
-                  issue.body = Format.sentence body
-                else
-                  issue.body += " #{ body }"
-        yield issue if issue?
+  print: ( options ) ->
+    if options.yaml?
+      ( reactor ) ->
+        console.log YAML.dump await do ->
+          issue for await issue from reactor
+    else
+      ( reactor ) ->
+        for await issue from reactor
+          console.log issue
 
   # converts an issue reactor into commands to create issues
   command: ( project ) ->
@@ -67,8 +50,8 @@ Issues =
       for await issue from reactor
         if !( await Issues.search issue )?
           ref = await Reference.make issue
-          issue.body ?= ""
-          issue.body += "\n\n#{ ref }"
+          issue.body += "\n\n" if issue.body != ""
+          issue.body += ref
           command = 
             name: "gh"
             arguments: [
@@ -96,7 +79,7 @@ Issues =
         ( issue.title == _issue.title ) &&
           do ->
             ( ref = Reference.extract _issue )? &&
-              ( issue.path == ref.path ) &&
-              ( issue.line == ref.line )
+              ( issue.token.path == ref.path ) &&
+              ( issue.token.line == ref.line )
 
 export default Issues

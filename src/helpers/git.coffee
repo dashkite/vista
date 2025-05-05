@@ -1,5 +1,20 @@
+import _Path from "node:path"
 import { $ } from "zx"
-import micromatch from "micromatch"
+import ignore from "ignore"
+import MIME from "mime"
+import { MediaType } from "@dashkite/media-type"
+import log from "@dashkite/kaiko"
+
+Path =
+
+  language: ( path ) ->
+    if ( mime = MIME.getType path )?
+      if ( type = MediaType.parse mime )?
+        type.subtype
+    else
+      extension = _Path.extname path
+      if extension != ""
+        extension[1..]
 
 Git =
 
@@ -18,14 +33,33 @@ Git =
     catch error      
       false
 
-  ls: ( glob, exclude = [] ) ->
-    try
+  ls: ({ glob, exclude }) ->
 
-      for await path from $"git ls-files #{ glob }"
-        unless micromatch.isMatch path, exclude
-          yield path
+    glob ?= []
+    exclude ?= []
 
-    catch error
-      console.error error  
+    # return files that are or could be in git using:
+    #
+    #   git ls-files #{ glob } -co --exclude-standard
+    #
+    # we use the -co flags so that we always get everything
+    # even if there are uncommitted changes
+    #
+    # we need --exclude-standard with -o
+    #
+    # we use ignore for exclude instead of -x
+    # b/c it has no effect when using -c
+
+    filter = ignore().add exclude
+  
+    for await path from $"git ls-files -co --exclude-standard"
+      unless filter.ignores path
+        if ( language = Path.language path )?
+          yield { path, language }
+        else
+          log.warn
+            console: true
+            message: "vista: unable to infer language 
+              from path [ #{ path } ]"
 
 export default Git

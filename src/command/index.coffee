@@ -1,5 +1,6 @@
 import FS from "node:fs"
 import dayjs from "dayjs"
+import * as Val from "@dashkite/joy/value"
 import log from "@dashkite/kaiko"
 import Logger from "#helpers/logging"
 import benchmark from "#helpers/benchmark"
@@ -13,7 +14,8 @@ Command =
     # ignore the commander object itself
     ( args..., options, _ ) ->
 
-      configuration = await Configuration.load()
+      options = Val.merge options,
+        await Configuration.load()
 
       # configure logging
       if options.verbose
@@ -34,14 +36,8 @@ Command =
           message: "running command [ #{ command } ]"
 
         try
-          if ( options.force || ( await Git.clean()))
-            command = ( await import("./#{ command }") ).default
-            await command args, options, configuration
-          else
-            log.error
-              console: true
-              message: "working directory not clean, exiting..."
-            process.exit 1
+          command = ( await import("./#{ command }") ).default
+          await command args, options
         catch error
           log.error
             console: true

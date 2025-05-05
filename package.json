@@ -52,12 +52,15 @@
     "@dashkite/generic": "link:../generic",
     "@dashkite/joy": "link:../joy",
     "@dashkite/kaiko": "^0.3.3",
+    "@dashkite/media-type": "link:../media-type",
     "@dashkite/url-codex": "link:../url-codex",
     "@dashkite/zephyr": "link:../zephyr",
     "chalk": "^5.4.1",
     "commander": "^13.1.0",
     "dayjs": "^1.11.13",
-    "micromatch": "^4.0.8",
+    "ignore": "^7.0.4",
+    "mime": "^4.0.7",
+    "prismjs": "^1.30.0",
     "zx": "^8.5.3"
   }
 }

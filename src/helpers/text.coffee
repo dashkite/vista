@@ -1,16 +1,21 @@
-before = ( target, text ) ->
-  if ( m = text.match target )?
-    [ matched ] = { index } = m
-    text[ 0...index ]
-  else text
+Text =
 
-after = ( target, text ) ->
-  if ( m = text.match target )?
-    [ matched ] = { index } = m
-    text[( index + matched.length ).. -1 ]
-  else text
+  before: ( target, text ) ->
+    if ( m = text.match target )?
+      [ matched ] = { index } = m
+      text[ 0...index ]
+    else text
 
-contains = ( target, text ) ->
-  ( text.match target )?
+  after: ( target, text ) ->
+    if ( m = text.match target )?
+      [ matched ] = { index } = m
+      text[( index + matched.length ).. -1 ]
+    else text
 
-export { before, after, contains }
+  contains: ( target, text ) ->
+    ( text.match target )?
+
+  collapse: ( text ) ->
+    text.replace /\s+/gm, -> " "
+
+export default Text

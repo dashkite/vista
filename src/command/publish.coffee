@@ -5,17 +5,4 @@ import Commands from "#helpers/commands"
 
 publish = ( args, options, configuration ) ->
 
-  do pipe [
-    -> Issues.from process.stdin
-    Issues.command options.project
-    Commands.run options.dryRun
-    ( results ) ->
-      issues = []
-      for await result from results
-        if !result.success
-          issues.push result.context.issue
-      if issues.length > 0
-        console.log YAML.dump issues
-  ]
-
 export default publish

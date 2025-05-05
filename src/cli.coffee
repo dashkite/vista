@@ -19,26 +19,21 @@ program
   .enablePositionalOptions()
 
 program
-  .command "extract"
-  .description "extract todos from source files"
-  .action Command.run "extract"
+  .command "print"
+  .description "extract todos and print them to the console"
+  .action Command.run "print"
+  .option "-x, --exclude <patterns...>", "Exclude files"
+  .option "--yaml", "Format output as YAML"
 
-program
-  .command "publish"
-  .description "convert issues into GitHub tickets"
-  .option "-n, --dry-run", "Show gh commands but don't execute them"
-  .option "-p, --project <name>", "Project name for adding issues"
-  .action Command.run "publish"
-  
-program
-  .command "remove"
-  .description "remove todos from source files"
-  .action Command.run "remove"
+# program
+#   .command "remove"
+#   .description "remove todos from source files"
+#   .action Command.run "remove"
 
 program
   .command "todos"
   .description "extract and remove todos and create issues"
-  .option "-n, --dry-run", "Show gh commands but don't execute them"
+  .option "-x, --exclude <patterns...>", "Exclude files"
   .option "-p, --project <name>", "Project name for adding issues"
   .action Command.run "todos"
 
@@ -46,6 +41,5 @@ program
 for command in program.commands
   command
     .option "-v, --verbose", "Perform debug logging"
-    .option "-f, --force", "Probably no"
 
 program.parseAsync()

@@ -1,5 +1,5 @@
 import { performance as Performance } from "node:perf_hooks"
-import { round } from "./format"
+import Format from "#helpers/format"
 
 benchmark = ( name, f ) ->
   Performance.mark "#{ name }-start"
@@ -8,7 +8,7 @@ benchmark = ( name, f ) ->
   { duration } = Performance.measure name, 
     "#{ name }-start", 
     "#{ name }-finish"
-  ( round duration / 1000 )
+  ( Format.round duration / 1000 )
 
 export { benchmark }
 export default benchmark

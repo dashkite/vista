@@ -1,45 +1,38 @@
-import FS from "node:fs/promises"
-import YAML from "js-yaml"
-import { pipe } from "@dashkite/joy/function"
-import { start as run } from "@dashkite/joy/iterable"
+import * as Fn from "@dashkite/joy/function"
 import log from "@dashkite/kaiko"
-import Todos from "#helpers/todos"
-import Commands from "#helpers/commands"
-import Issues from "#helpers/issues"
 import Labels from "#helpers/labels"
+import Todos from "#helpers/todos"
+import Issues from "#helpers/issues"
+import Commands from "#helpers/commands"
 import Git from "#helpers/git"
 
-todos = ( args, options, configuration ) ->
+todos = ( args, options ) ->
 
-  if !( "vista" in await Labels.list())
-    await Labels.create "vista", "Created by Vista"
+  if ( await Git.clean())
 
-  for { description, comment, glob, exclude } in configuration.files
+    if !( "vista" in await Labels.list())
+      await Labels.create "vista", "Created by Vista"
 
-    if configuration.exclude?
-      exclude ?= []
-      exclude = [ exclude..., configuration.exclude... ]
-
-    log.info
-      console: true
-      message: "processing: #{ description }"
-
-    await do pipe [
-      -> Todos.extract comment, glob, exclude
+    command = Fn.pipe [
+      Todos.extract
       Issues.command options.project
       Commands.run options.dryRun
-      ( results ) ->
-        for await result from results
-          if result.output != ""
-            console.error result.output
-          if !result.success
-            throw new Error "conversion failed"
+      Commands.print
     ]
+
+    await command options
 
     if !options.dryRun
       await run Todos.remove comment, glob, exclude
 
-  if !options.dryRun && !( await Git.clean())
-    await Git.commit()
+    if !options.dryRun && !( await Git.clean())
+      await Git.commit()
+
+  else
+
+    log.error
+      console: true
+      message: "working directory not clean, exiting..."
+    process.exit 1
 
 export default todos

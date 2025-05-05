@@ -1,6 +1,7 @@
 import { $, quotePowerShell } from "zx"
 
 Commands =
+
   format: ( command ) ->
     [ command.name, command.arguments... ]
       .map quotePowerShell
@@ -20,5 +21,13 @@ Commands =
           catch error
             output = error.toString().trim()
             yield { success: false, command, output, error, context }
+
+  print: ( results ) ->
+    for await result from results
+      if result.output != ""
+        console.error result.output
+      if !result.success
+        throw new Error "conversion failed"
+    return
 
 export default Commands
