@@ -22,7 +22,7 @@ todos = ( args, options ) ->
 
     await command options
 
-    await Todos.remove comment, glob, exclude
+    await Todos.remove options
 
     if !( await Git.clean())
       await Git.commit()
