@@ -22,10 +22,9 @@ todos = ( args, options ) ->
 
     await command options
 
-    if !options.dryRun
-      await run Todos.remove comment, glob, exclude
+    await Todos.remove comment, glob, exclude
 
-    if !options.dryRun && !( await Git.clean())
+    if !( await Git.clean())
       await Git.commit()
 
   else
