@@ -1,3 +1,4 @@
+import FS from "node:fs/promises"
 import Prism from "prismjs"
 import loader from "prismjs/components/"
 
@@ -6,10 +7,9 @@ Token =
   # since we only care about comments, we can flatten nested tokens
   flatten: ( token ) ->
     if Array.isArray token.content
-      tokens = do ->
-        for token in token.content
-          Token.flatten token
-      content = tokens.join ""
+      content = ""
+      for token in token.content
+        content += ( Token.flatten token ).content
       length = content.length
       { token..., content, length }
     else
