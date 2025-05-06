@@ -8,8 +8,8 @@ Token =
   flatten: ( token ) ->
     if Array.isArray token.content
       content = ""
-      for token in token.content
-        content += ( Token.flatten token ).content
+      for _token in token.content
+        content += ( Token.flatten _token ).content
       length = content.length
       { token..., content, length }
     else
