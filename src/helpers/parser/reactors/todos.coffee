@@ -35,7 +35,8 @@ Todo =
     todo?.title?.length > 0
 
   finalize: ( todo ) ->
-    todo.body = Format.sentence Text.collapse todo.body
+    if todo.token.type == "comment"
+      todo.body = Format.sentence Text.collapse todo.body
     todo
 
 Todos =
@@ -89,7 +90,7 @@ Todos =
             }
           else if token.type == "multiline-comment"
             current = undefined
-            yield {
+            yield Todo.finalize {
               ( Todo.multiline token )...
               token
             }
@@ -97,7 +98,7 @@ Todos =
     ( yield Todo.finalize current ) if Todo.valid current
   
   remove: ( reactor ) ->
-    for await { token } from reactor when !token.todo?
+    for await token from reactor when !token.todo?
       yield token
 
 export default Todos
