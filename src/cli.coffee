@@ -4,19 +4,45 @@ import { program } from "commander"
 import Command from "./command"
 import { $ } from "zx"
 
-# TODO Allow configuration of file-type to tokenizer mapping (ex: `.foo` files use the `foo` tokenizer)
+# TODO Allow configuration of file-types
+#
+# Allow configuration of file-types to tokenizer mapping
+# (ex: `.foo` files use the `foo` tokenizer)
 
-# TODO Give precedence to file extension for generating the mapping and fallback to (or remove) MIME type check
+# TODO Give precedence to file extension
+#
+# Give precedence to file extension when generating the
+# mapping and fallback to (or remove) MIME type check
 
-# TODO Provide an option for including dot-files (or remove that as a default?)
+# TODO Provide an option for including dot-file
+#
+# (or remove that as a default?)
 
-# TODO Allow configuration file to be passed as an option
+# TODO Allow configuration file option
+#
+# Allow the configuration file to be passed as an option
 
 # TODO Add more tests
 
-# TODO Rename the command and repositor to _Todos_
+### TODO Rename the repository 
 
-# TODO Rename the `todos` command to `track`
+to _Todos_
+
+###
+
+# TODO Rename the todos command to track
+# Rename the `todos` command to `track`
+
+### 
+
+TODO fix coffeescript tokenizer
+
+currently the prismjs tokenizer parses inline comments on
+a line by themselves as raw text
+
+ex: `#` nothing here!
+
+###
 
 # we'll handle our own output thank you
 $.quiet = true

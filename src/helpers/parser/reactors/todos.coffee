@@ -12,10 +12,23 @@ Todo =
       ( token.path == previous.path )
 
   title: ( token ) ->
-    Format.title ( Text.after /^\W+todo:?\b/i, token.content ).trim()
+    Format.title ( Text.after /^\W*todo:?\b/i, token.content ).trim()
 
   body: ( token ) ->
    ( Text.after /^\W+/i, token.content ).trim()
+
+  multiline: ( token ) ->
+    content = Text.after /^\W+/m, token.content
+    [ first, rest..., _ ] = content.split "\n"
+    title: Todo.title content: first
+    body: Todo.body content: do ->
+      result = ""
+      for line, i in rest
+        if rest[ i + 1 ] == ""
+          result += "#{ line }\n\n"
+        else
+          result += " #{ line }"
+      result
 
   valid: ( todo ) ->
     # there has to at least be a title
@@ -68,11 +81,19 @@ Todos =
         else
           ( yield Todo.finalize current ) if Todo.valid current
           index = token.todo
-          current = {
-            title: Todo.title token
-            body: ""
-            token
-          }
+          if token.type == "comment"
+            current = {
+              title: Todo.title token
+              body: ""
+              token
+            }
+          else if token.type == "multiline-comment"
+            current = undefined
+            yield {
+              ( Todo.multiline token )...
+              token
+            }
+
     ( yield Todo.finalize current ) if Todo.valid current
   
   remove: ( reactor ) ->

@@ -34,12 +34,15 @@ Token =
         yield { ( Token.flatten token )..., context... }
 
   decorate: ( reactor ) ->
-    offset = 0
-    line = 1
-    for await token from reactor
-      yield { token..., offset, line }
-      line += ( token.content.split("\n").length - 1 )
-      offset += token.length
+    do ({ offset, line, path } = {}) ->
+      for await token from reactor
+        if token.path != path
+          path = token.path
+          offset = 0
+          line = 1
+        yield { token..., offset, line }
+        line += ( token.content.split("\n").length - 1 )
+        offset += token.length
 
   writer: ( reactor ) ->
     path = undefined
