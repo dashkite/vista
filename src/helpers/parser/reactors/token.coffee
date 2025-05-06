@@ -2,18 +2,24 @@ import FS from "node:fs/promises"
 import Prism from "prismjs"
 import loader from "prismjs/components/"
 
-Token =
+normalize = ( token ) ->
+  if !token.type?
+    { content: token, length: token.length, context... }
+  else
+    { ( flatten token )..., context... }
 
-  # since we only care about comments, we can flatten nested tokens
-  flatten: ( token ) ->
-    if Array.isArray token.content
-      content = ""
-      for _token in token.content
-        content += ( Token.normalize _token ).content
-      length = content.length
-      { token..., content, length }
-    else
-      token
+# since we only care about comments, we can flatten nested tokens
+flatten = ( token ) ->
+  if Array.isArray token.content
+    content = ""
+    for _token in token.content
+      content += ( normalize _token ).content
+    length = content.length
+    { token..., content, length }
+  else
+    token
+
+Token =
 
   tokenize: ( reactor ) ->
     for await { path, content, language, context... } from reactor
@@ -28,10 +34,7 @@ Token =
 
   normalize: ( reactor ) ->
     for await { token, context... } from reactor
-      if !token.type?
-        yield { content: token, length: token.length, context... }
-      else
-        yield { ( Token.flatten token )..., context... }
+      yield normalize token
 
   decorate: ( reactor ) ->
     do ({ offset, line, path } = {}) ->
