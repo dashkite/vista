@@ -4,33 +4,6 @@ import { program } from "commander"
 import Command from "./command"
 import { $ } from "zx"
 
-
-#
-# Allow configuration of file-types to tokenizer mapping
-# (ex: `.foo` files use the `foo` tokenizer)
-
-
-#
-# Give precedence to file extension when generating the
-# mapping and fallback to (or remove) MIME type check
-
-
-#
-# (or remove that as a default?)
-
-
-#
-# Allow the configuration file to be passed as an option
-
-
-
-
-
-
-
-
-
-
 # we'll handle our own output thank you
 $.quiet = true
 
