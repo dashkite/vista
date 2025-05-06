@@ -2,7 +2,7 @@ import FS from "node:fs/promises"
 import Prism from "prismjs"
 import loader from "prismjs/components/"
 
-normalize = ( token ) ->
+normalize = ( token, context = {}) ->
   if !token.type?
     { content: token, length: token.length, context... }
   else
@@ -34,7 +34,7 @@ Token =
 
   normalize: ( reactor ) ->
     for await { token, context... } from reactor
-      yield normalize token
+      yield normalize token, context
 
   decorate: ( reactor ) ->
     do ({ offset, line, path } = {}) ->
