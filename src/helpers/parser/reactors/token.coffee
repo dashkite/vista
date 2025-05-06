@@ -9,7 +9,7 @@ Token =
     if Array.isArray token.content
       content = ""
       for _token in token.content
-        content += ( Token.flatten _token ).content
+        content += ( Token.normalize _token ).content
       length = content.length
       { token..., content, length }
     else
