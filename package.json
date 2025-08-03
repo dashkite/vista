@@ -55,7 +55,7 @@
     "@dashkite/media-type": "link:../media-type",
     "@dashkite/url-codex": "link:../url-codex",
     "@dashkite/zephyr": "link:../zephyr",
-    "chalk": "^5.4.1",
+    "chalk": "^4.1.2",
     "commander": "^13.1.0",
     "dayjs": "^1.11.13",
     "ignore": "^7.0.4",
